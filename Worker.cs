@@ -23,7 +23,6 @@ namespace KafkaMicroservice
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                // Define the functions to execute in order
                 var tasks = new List<Func<Task>>
             {
                 SourceToDestUpload,
@@ -31,10 +30,9 @@ namespace KafkaMicroservice
                 AzureToDestDownload,
                 DeleteAzureBlobs,
                 EmailLogs
-
             };
 
-                // Execute each function with a 2-minute delay
+                //2-minute delay
                 for (int i = 0; i < tasks.Count; i++)
                 {
                     if (stoppingToken.IsCancellationRequested)
@@ -42,7 +40,7 @@ namespace KafkaMicroservice
 
                     await tasks[i]();
 
-                    if (i < tasks.Count - 1) // Avoid delay after the last function in the cycle
+                    if (i < tasks.Count - 1) 
                     {
                         await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
                     }
